@@ -1,96 +1,325 @@
 <!DOCTYPE html>
-<html lang="en">
-  <!-- Head tag -->
-  <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <!-- Title -->
-  
-  <title>Linear Discriminant Analysis(LDA)简介 - Ghost in the Hoop</title>
 
-  <!--Favicon-->
-  <link rel="icon" href="favicon/favicon.ico">
 
-  <!--Description-->
-  
-      <meta name="description" content="Linear Discriminant AnalysisBy Yang Chen
-
-贝叶斯分类器
-引入「LDA」之前，我们先介绍贝叶斯分类器「Bayes Classifier」。它是一个重要的基准，因为在所有分类器中它的测试集误差率「Test Error Rate」是最低的。任何其他分类器都可以">
   
 
-  <!--Author-->
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   
-      <meta name="author" content="Eric Chen">
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Linear Discriminant AnalysisBy Eric Chen  贝叶斯分类器  引入「LDA」之前，我们先介绍贝叶斯分类器「Bayes Classifier」。它是一个重要的基准，因为在所有分类器中它的测试集误差率「Test Error Rate」是最低的。任何其他分类器都可以通过与贝叶斯分类器对比误差率从而评价其理想程度。  贝叶斯分类器形式如下： $$ C^{Bayes">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linear Discriminant Analysis(LDA)简介">
+<meta property="og:url" content="http://www.ghostinthehoop.com/2018/07/24/Linear-Discriminant-Analysis-LDA-简介/index.html">
+<meta property="og:site_name" content="Ghost in the Hoop">
+<meta property="og:description" content="Linear Discriminant AnalysisBy Eric Chen  贝叶斯分类器  引入「LDA」之前，我们先介绍贝叶斯分类器「Bayes Classifier」。它是一个重要的基准，因为在所有分类器中它的测试集误差率「Test Error Rate」是最低的。任何其他分类器都可以通过与贝叶斯分类器对比误差率从而评价其理想程度。  贝叶斯分类器形式如下： $$ C^{Bayes">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://pappwqm07.bkt.clouddn.com/Bayes_decision_boundary">
+<meta property="og:image" content="http://pappwqm07.bkt.clouddn.com/QDA-boundary">
+<meta property="og:updated_time" content="2018-07-24T02:48:53.381Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linear Discriminant Analysis(LDA)简介">
+<meta name="twitter:description" content="Linear Discriminant AnalysisBy Eric Chen  贝叶斯分类器  引入「LDA」之前，我们先介绍贝叶斯分类器「Bayes Classifier」。它是一个重要的基准，因为在所有分类器中它的测试集误差率「Test Error Rate」是最低的。任何其他分类器都可以通过与贝叶斯分类器对比误差率从而评价其理想程度。  贝叶斯分类器形式如下： $$ C^{Bayes">
+<meta name="twitter:image" content="http://pappwqm07.bkt.clouddn.com/Bayes_decision_boundary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.ghostinthehoop.com/2018/07/24/Linear-Discriminant-Analysis-LDA-简介/"/>
+
+
+
+
+
+  <title>Linear Discriminant Analysis(LDA)简介 | Ghost in the Hoop</title>
   
 
-  <!-- Pure CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-  <link href="https://fonts.googleapis.com/css?family=Crimson+Text|Open+Sans:300,800" rel="stylesheet">
 
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="/css/styles.css">
 
-  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-  <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
 
-  <!-- Google Analytics -->
-  
+
+
+
 
 </head>
 
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
-  <body>
-  	<div class="container-fluid navbar-container m-sm-5">
-      <!-- Header -->
-      <nav class="navbar navbar-toggleable-sm navbar-light px-1 py-3 my-3 mb-sm-5">
-  <a class="navbar-brand ml-2" href="/">Ghost in the Hoop</a>
-  <button class="navbar-toggler navbar-toggler-right py-2" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse text-center" id="navbarCollapse">
-    <ul class="navbar-nav ml-auto my-auto">
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Ghost in the Hoop</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
       
     </ul>
-    <hr class="hidden-md-up" />
-  </div>
+  
+
+  
 </nav>
 
 
-  		<div class="row">
-  			<div class="col-12 mb-4">
-  <img class="img-fluid project-img" src="/images/unsplash.jpg" alt="Linear Discriminant Analysis(LDA)简介">
-</div>
-<div class="col-lg-4 col-12 pt-3 px-4 pr-lg-5">
-  <h1>Linear Discriminant Analysis(LDA)简介</h1>
-</div>
-<div class="col-lg-8 col-12 pt-lg-3 mb-4 pl-lg-5 px-lg-0 px-4 portfolio-content">
-  <h1 id="Linear-Discriminant-Analysis"><a href="#Linear-Discriminant-Analysis" class="headerlink" title="Linear Discriminant Analysis"></a>Linear Discriminant Analysis</h1><p>By Yang Chen</p>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.ghostinthehoop.com/2018/07/24/Linear-Discriminant-Analysis-LDA-简介/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Eric Chen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ghost in the Hoop">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linear Discriminant Analysis(LDA)简介</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-24T10:34:33+08:00">
+                2018-07-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Linear-Discriminant-Analysis"><a href="#Linear-Discriminant-Analysis" class="headerlink" title="Linear Discriminant Analysis"></a>Linear Discriminant Analysis</h1><p>By Eric Chen</p>
+<hr>
+<h4 id="贝叶斯分类器"><a href="#贝叶斯分类器" class="headerlink" title="贝叶斯分类器"></a><strong>贝叶斯分类器</strong></h4><p>  引入「LDA」之前，我们先介绍贝叶斯分类器「Bayes Classifier」。它是一个重要的基准，因为在所有分类器中它的测试集误差率「Test Error Rate」是最低的。任何其他分类器都可以通过与贝叶斯分类器对比误差率从而评价其理想程度。</p>
 <ul>
-<li><p><strong>贝叶斯分类器</strong></p>
-<p>引入「LDA」之前，我们先介绍贝叶斯分类器「Bayes Classifier」。它是一个重要的基准，因为在所有分类器中它的测试集误差率「Test Error Rate」是最低的。任何其他分类器都可以通过与贝叶斯分类器对比误差率从而评价其理想程度。</p>
+<li><p>贝叶斯分类器形式如下：</p>
+<pre><code>$$
+C^{Bayes}(x) = \mathop{\arg\max}_{r \in \{1, 2, \dots, K\}}
+$$
+</code></pre><p>   即给定输入 $x$，贝叶斯分类器会计算 $Y$ 属于第 $r$ 类的条件概率 $P(Y = r | X = x)$，然后选择使这个条件概率最大的类。</p>
+</li>
+<li><p>设想一个二项分类的简单情形，$Y$ 有两种可能的类（下图中橘色和蓝色的点）。虚线代表了贝叶斯分类器给出的分界线，也叫做贝叶斯决策边界「Bayes Decision Boundary」。在线上，Y属于任何一类的条件概率都是 $0.5$，输入点落到任何一侧都会使成为该类的条件概率超过 $0.5$。</p>
+  <div align="center"><br>      <img src="http://pappwqm07.bkt.clouddn.com/Bayes_decision_boundary" width="600" height="400" alt="BayesBoundary" align="center"><br>  </div>
+</li>
+<li><p>但是贝叶斯分类器的计算往往不可能实现。它代表着最理想的情况，因为计算 $P(Y = r | X = x)$ 需要我们知道数据集生成的系统性规则。而这个规则恰恰是我们想从数据中学习到的信息，是不可得的。我们只能从有限的数据中去估计、逼近这种规则。这也就是其他所有分类器以及统计方法要做的事情。</p>
 </li>
 </ul>
-<pre><code>- 贝叶斯分类器形式如下：
-  $$
-  C^{Bayes}(x) = \mathop{\arg\max}_{r \in \{1, 2, \dots, K\}}
-  $$
-
-  即给定输入 $x$，贝叶斯分类器会计算 $Y$ 属于第 $r$ 类的条件概率 $P(Y = r | X = x)$，然后选择使这个条件概率最大的类。
-
-- 设想一个二项分类的简单情形，$Y$ 有两种可能的类（下图中橘色和蓝色的点）。虚线代表了贝叶斯分类器给出的分界线，也叫做贝叶斯决策边界「Bayes Decision Boundary」。在线上，Y属于任何一类的条件概率都是 $0.5$，输入点落到任何一侧都会使成为该类的条件概率超过 $0.5$。
-  ![BayesBoundary](http://pappwqm07.bkt.clouddn.com/Bayes_decision_boundary)
-
-- 但是贝叶斯分类器的计算往往不可能实现。它代表着最理想的情况，因为计算 $P(Y = r | X = x)$ 需要我们知道数据集生成的系统性规则。而这个规则恰恰是我们想从数据中学习到的信息，是不可得的。我们只能从有限的数据中去估计、逼近这种规则。这也就是其他所有分类器以及统计方法要做的事情。
-</code></pre><hr>
-<ul>
-<li><p><strong>线性判别分析</strong> 「LDA」</p>
-<ul>
+<hr>
+<h4 id="线性判别分析-「LDA」"><a href="#线性判别分析-「LDA」" class="headerlink" title="线性判别分析 「LDA」"></a><strong>线性判别分析</strong> 「LDA」</h4><ul>
 <li>先回忆一下逻辑回归「Logistic Regression」的形式<br>$$<br>P(Y = 1 | x;\theta) = h_{\theta}(x) = \frac{e^{\theta^{T}x}}{1 + e^{\theta^{T}x}}<br>$$<br>它估计的是给定输入 $X$ 的情况下，$Y$ 的<strong>条件分布</strong> 「conditional distribution」（本质上是$Y$的后验分布）。方法是通过Sigmoid函数转换线性函数，使其满足概率的基本特征。</li>
 <li><p>现在我们尝试用另一个思路去给这个条件分布建模，即通过<strong>贝叶斯理论</strong>来估计它。</p>
 <ol>
@@ -129,7 +358,6 @@
 <li>$\tilde{\Sigma} = \sum_{k=1}^{K}\sum_{g_{i} = k}(x_{i}-\tilde{\mu_{k}})(x_{i} - \tilde{\mu_{k}})^{T} / (N - K)$</li>
 </ul>
 <p>代替后我们完成最优化，即是LDA。</p>
-<blockquote>
 <p>注：LDA与逻辑回归类似，都是构建了一个线性的decision boundary。我们计算一下LDA下的对数几率「logit」就可以看出</p>
 <pre><code>$$
 \log \frac{P(Y = k | X = x)}{P(Y = l | X = x)}
@@ -139,35 +367,390 @@ $$
 =  \log \frac{\pi_{k}}{\pi_{l}} - \frac12(\mu_{k} + \mu_{l})^{T}\Sigma^{-1}(\mu_{k} - \mu_{l}) + x^{T}\Sigma^{-1}(\mu_{k} - \mu_{l})
 $$
 把$\pi_{k}$等参数用估计值代替后，依然能看出这是一个关于$x$的线性函数。
-</code></pre></blockquote>
-</li>
-</ul>
-</li>
+</code></pre></li>
 </ul>
 <pre><code>下图中我们用模拟生成的数据分别绘制了贝叶斯分类器和LDA给出的边界。一共模拟了三类，每一类中的数据都由高斯分布生成，并且三个分布共享同一个协方差矩阵。虚线给出了贝叶斯分类器的决策边界，右图的黑色实线代表LDA的决策边界。可以看到二者相差无几。
-![LDA](http://pappwqm07.bkt.clouddn.com/LDA_boundary)
 
-&gt; 注：由于LDA会在K纬空间中选择超平面来划分空间，它也把K维数据投影到了K-1维空间中，因此也具有降维的作用，具体请参考[这篇文章](http://www.dataivy.cn/blog/%E7%BA%BF%E6%80%A7%E5%88%A4%E5%88%AB%E5%88%86%E6%9E%90linear-discriminant-analysis_lda/)
+&lt;div  align=&quot;center&quot;&gt;
+    &lt;img src=&quot;http://pappwqm07.bkt.clouddn.com/LDA_boundary&quot; width = &quot;540&quot; height = &quot;400&quot; alt=&quot;LDA&quot; align=center /&gt;
+&lt;/div&gt;
+注：由于LDA会在K纬空间中选择超平面来划分空间，它也把K维数据投影到了K-1维空间中，因此也具有降维的作用，具体请参考[这篇文章](http://www.dataivy.cn/blog/%E7%BA%BF%E6%80%A7%E5%88%A4%E5%88%AB%E5%88%86%E6%9E%90linear-discriminant-analysis_lda/)。
 </code></pre><hr>
-<ul>
-<li><p><strong>二次判别分析</strong> 「QDA」</p>
-<p>二次判别分析「Quadratic Discriminant Analysis」也很简单，它在LDA的基础上抛弃了不同类别的高斯分布具有相同协方差矩阵的假设，也就是<br>$$<br>\Sigma_{k} \neq \Sigma_{l} \quad ~ \text{for} ~ ~ k \neq l<br>$$</p>
-<p>相应地它在空间内划分出的平面不再是线性。</p>
-<div align="center"><br>  <img src="http://pappwqm07.bkt.clouddn.com/QDA-boundary" width="300" height="300" alt="QDA" align="center"><br></div>
-</li>
-</ul>
+<h4 id="二次判别分析-「QDA」"><a href="#二次判别分析-「QDA」" class="headerlink" title="二次判别分析 「QDA」"></a><strong>二次判别分析</strong> 「QDA」</h4><p>  二次判别分析「Quadratic Discriminant Analysis」也很简单，它在LDA的基础上抛弃了不同类别的高斯分布具有相同协方差矩阵的假设，也就是<br>  $$<br>  \Sigma_{k} \neq \Sigma_{l} \quad ~ \text{for} ~ ~ k \neq l<br>  $$</p>
+<p>  相应地它在空间内划分出的平面不再是线性。</p>
+  <div align="center"><br>    <img src="http://pappwqm07.bkt.clouddn.com/QDA-boundary" width="300" height="300" alt="QDA" align="center"><br>  </div>
 
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/24/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Eric Chen</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Linear-Discriminant-Analysis"><span class="nav-number">1.</span> <span class="nav-text">Linear Discriminant Analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#贝叶斯分类器"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">贝叶斯分类器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线性判别分析-「LDA」"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">线性判别分析 「LDA」</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二次判别分析-「QDA」"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">二次判别分析 「QDA」</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Eric Chen</span>
+
+  
 </div>
 
 
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
       </div>
-      
-  	</div>
+    </footer>
 
-    <!-- After footer scripts -->
-    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
 
-  </body>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
 </html>
