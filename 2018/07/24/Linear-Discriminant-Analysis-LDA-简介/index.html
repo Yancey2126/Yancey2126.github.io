@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="贝叶斯分类器  引入「LDA」之前，我们先介绍贝叶斯分类器「Bayes Classifier」。它是一个重要的基准，因为在所有分类器中它的测试集误差率「Test Error Rate」是最低的。任何其他分类器都可以通过与贝叶斯分类器对比误差率从而评价其理想程度。  贝叶斯分类器形式如下：  $$  C^{Bayes}(x) = \mathop{\arg\max}_{r \in {1, 2, \">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linear Discriminant Analysis(LDA)简介">
+<meta property="og:url" content="http://www.ghostinthehoop.com/2018/07/24/Linear-Discriminant-Analysis-LDA-简介/index.html">
+<meta property="og:site_name" content="Ghost in the Hoop">
+<meta property="og:description" content="贝叶斯分类器  引入「LDA」之前，我们先介绍贝叶斯分类器「Bayes Classifier」。它是一个重要的基准，因为在所有分类器中它的测试集误差率「Test Error Rate」是最低的。任何其他分类器都可以通过与贝叶斯分类器对比误差率从而评价其理想程度。  贝叶斯分类器形式如下：  $$  C^{Bayes}(x) = \mathop{\arg\max}_{r \in {1, 2, \">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://pappwqm07.bkt.clouddn.com/Bayes_decision_boundary">
+<meta property="og:image" content="http://pappwqm07.bkt.clouddn.com/LDA_boundary">
+<meta property="og:image" content="http://pappwqm07.bkt.clouddn.com/QDA-boundary">
+<meta property="og:updated_time" content="2018-07-24T06:56:29.102Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linear Discriminant Analysis(LDA)简介">
+<meta name="twitter:description" content="贝叶斯分类器  引入「LDA」之前，我们先介绍贝叶斯分类器「Bayes Classifier」。它是一个重要的基准，因为在所有分类器中它的测试集误差率「Test Error Rate」是最低的。任何其他分类器都可以通过与贝叶斯分类器对比误差率从而评价其理想程度。  贝叶斯分类器形式如下：  $$  C^{Bayes}(x) = \mathop{\arg\max}_{r \in {1, 2, \">
+<meta name="twitter:image" content="http://pappwqm07.bkt.clouddn.com/Bayes_decision_boundary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.ghostinthehoop.com/2018/07/24/Linear-Discriminant-Analysis-LDA-简介/"/>
+
+
+
+
+
+  <title>Linear Discriminant Analysis(LDA)简介 | Ghost in the Hoop</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Ghost in the Hoop</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.ghostinthehoop.com/2018/07/24/Linear-Discriminant-Analysis-LDA-简介/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Eric Chen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ghost in the Hoop">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linear Discriminant Analysis(LDA)简介</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-24T10:34:33+08:00">
+                2018-07-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="贝叶斯分类器"><a href="#贝叶斯分类器" class="headerlink" title="贝叶斯分类器"></a><strong>贝叶斯分类器</strong></h4><p>  引入「LDA」之前，我们先介绍贝叶斯分类器「Bayes Classifier」。它是一个重要的基准，因为在所有分类器中它的测试集误差率「Test Error Rate」是最低的。任何其他分类器都可以通过与贝叶斯分类器对比误差率从而评价其理想程度。</p>
+<ul>
+<li><p>贝叶斯分类器形式如下：<br>  $$<br>  C^{Bayes}(x) = \mathop{\arg\max}_{r \in {1, 2, \dots, K}}<br>  $$</p>
+<p>   即给定输入 $x$，贝叶斯分类器会计算 $Y$ 属于第 $r$ 类的条件概率 $P(Y = r | X = x)$，然后选择使这个条件概率最大的类。</p>
+</li>
+<li><p>设想一个二项分类的简单情形，$Y$ 有两种可能的类（下图中橘色和蓝色的点）。虚线代表了贝叶斯分类器给出的分界线，也叫做贝叶斯决策边界「Bayes Decision Boundary」。在线上，Y属于任何一类的条件概率都是 $0.5$，输入点落到任何一侧都会使成为该类的条件概率超过 $0.5$。</p>
+  <div align="center"><br>      <img src="http://pappwqm07.bkt.clouddn.com/Bayes_decision_boundary" width="600" height="400" alt="BayesBoundary" align="center"><br>  </div>
+</li>
+<li><p>但是贝叶斯分类器的计算往往不可能实现。它代表着最理想的情况，因为计算 $P(Y = r | X = x)$ 需要我们知道数据集生成的系统性规则。而这个规则恰恰是我们想从数据中学习到的信息，是不可得的。我们只能从有限的数据中去估计、逼近这种规则。这也就是其他所有分类器以及统计方法要做的事情。</p>
+</li>
+</ul>
+<hr>
+<h4 id="线性判别分析-「LDA」"><a href="#线性判别分析-「LDA」" class="headerlink" title="线性判别分析 「LDA」"></a><strong>线性判别分析</strong> 「LDA」</h4><ul>
+<li>先回忆一下逻辑回归「Logistic Regression」的形式<br>$$<br>P(Y = 1 | x;\theta) = h_{\theta}(x) = \frac{e^{\theta^{T}x}}{1 + e^{\theta^{T}x}}<br>$$<br>它估计的是给定输入 $X$ 的情况下，$Y$ 的<strong>条件分布</strong> 「conditional distribution」（本质上是$Y$的后验分布）。方法是通过Sigmoid函数转换线性函数，使其满足概率的基本特征。</li>
+<li><p>现在我们尝试用另一个思路去给这个条件分布建模，即通过<strong>贝叶斯理论</strong>来估计它。</p>
+<ol>
+<li>首先假设我们知道 $Y$ 的先验分布「prior」<br>$$<br>\pi_{k} = P(Y = k)<br>$$<br>也就是任意一个样本属于第 $k$ 类的概率。</li>
+<li>其次我们假设 $X$ 在给定 $Y$ 之后的条件概率<br>$$<br>f_{k}(x) \equiv P(X = x | Y = k)<br>$$</li>
+<li><p>现在我们已经可以根据贝叶斯概率公式计算我们想要的条件概率了<br>$$<br>P(Y = k | X = x) = \frac{P(Y = k, X = x)}{P(X = x)}<br>$$</p>
+<p>$$<br> = \frac{\pi_{k}f_{k}(x)}{\sum_{l=1}^K \pi_{l}f_{l}(x)}<br>$$</p>
+</li>
+</ol>
+</li>
+<li><p>很明显根据上式计算出的条件分布就是一个贝叶斯分类器，代表理想情况。但我们不能精确地计算上式，因为 $\pi_{k}$ 和 $f_{k}(x)$ 都是未知的，只能通过训练数据集估计。</p>
+<ol>
+<li>估计 $\pi_{k}$ 很简单，计算训练集中属于 $k$ 类的样本占总样本的比例即可；<br>$$<br>\tilde{\pi_{k}} = N_{k}/N<br>$$</li>
+<li>$f_{k}(x)$ 的估计则困难得多，通常我们必须对 $x$ 的分布作一些假设（如高斯分布）。不同的分布假设衍生出不同的分类方法，包括LDA、QDA、Naive Bayes等。</li>
+</ol>
+</li>
+<li><p>LDA 有两条重要假设：</p>
+<ul>
+<li>$f_{k}(x)$ 符合高斯/正态分布「Guassian Distribution」<br>$$<br>f_{k}(x) = \frac{1}{(2\pi)^{p/2}|\Sigma_{k}|^{1/2}}e^{-\frac12 (x - \mu_{k})^{T}\Sigma_{k}^{-1}(x-\mu_{k})}<br>$$</li>
+<li>对所有类 ${1, 2, \dots, K}$， 协方差矩阵是相同的<br>$$<br>\Sigma_{k} = \Sigma<br>$$</li>
+</ul>
+<p>把高斯分布代入贝叶斯公式，再取对数<br>$$<br>P(Y = k | X = x)) = \frac{\pi_{k}\frac{1}{(2\pi)^{p/2}|\Sigma_{k}|^{1/2}}e^{-\frac12 (x - \mu_{k})^{T}\Sigma_{k}^{-1}(x-\mu_{k})}}{\sum_{l=1}^K \pi_{l} \frac{1}{(2\pi)^{p/2}|\Sigma_{l}|^{1/2}}e^{-\frac12 (x - \mu_{l})^{T}\Sigma_{l}^{-1}(x-\mu_{l})}}<br>$$</p>
+<p>再利用第二条假设—同协方差矩阵—整理后可得：</p>
+<p>$$<br>\arg\max_{k} \log(P(Y = k | X = x)))<br>$$</p>
+<p>等价于</p>
+<p>$$<br>\arg\max_{k} \delta_{k}(x)<br>$$</p>
+<p>$$<br>\delta_{k}(x) = x^{T}\Sigma^{-1}\mu_{k} - \frac12\mu_{k}^{T}\Sigma^{-1}\mu_{k} + \log\pi_{k}<br>$$</p>
+<p>$\delta_{k}(x)$ 被称为<strong>线性判别方程</strong>。</p>
+</li>
+<li><p>线性判别方程对应的是贝叶斯分类器的目标函数，对其最大化就得到了贝叶斯分类器。但前面已经说过我们不知道高斯分布的具体参数，也就是我们不知道数据生成的规则。因此要用估计值来代替：</p>
+<ul>
+<li>$\tilde{\pi_{k}} = N_{k}/N$</li>
+<li>$\tilde{\mu_{k}} = \sum_{Y_{i} = k}x_{i} / N_{k}$</li>
+<li>$\tilde{\Sigma} = \sum_{k=1}^{K}\sum_{g_{i} = k}(x_{i}-\tilde{\mu_{k}})(x_{i} - \tilde{\mu_{k}})^{T} / (N - K)$</li>
+</ul>
+<p>代替后我们完成最优化，即是LDA。</p>
+<blockquote>
+<p>注：LDA与逻辑回归类似，都是构建了一个线性的decision boundary。我们计算一下LDA下的对数几率「logit」就可以看出<br>$$<br>\log \frac{P(Y = k | X = x)}{P(Y = l | X = x)}<br>= \log \frac{f_{k}(x)}{f_{l}(x)} + \log\frac{\pi_{k}}{\pi_{l}}<br>$$<br>$$<br>=  \log \frac{\pi_{k}}{\pi_{l}} - \frac12(\mu_{k} +\mu_{l})^{T}\Sigma^{-1}(\mu_{k} - \mu_{l}) +x^{T}\Sigma^{-1}(\mu_{k} - \mu_{l})<br>$$<br>把$\pi_{k}$等参数用估计值代替后，依然能看出这是一个关于$x$的线性函数。</p>
+</blockquote>
+</li>
+</ul>
+<p>下图中我们用模拟生成的数据分别绘制了贝叶斯分类器和LDA给出的边界。一共模拟了三类，每一类中的数据都由高斯分布生成，并且三个分布共享同一个协方差矩阵。虚线给出了贝叶斯分类器的决策边界，右图的黑色实线代表LDA的决策边界。可以看到二者相差无几。</p>
+<div align="center"><br>    <img src="http://pappwqm07.bkt.clouddn.com/LDA_boundary" width="540" height="400" alt="LDA" align="center"><br></div>
+
+<blockquote>
+<p>注：由于LDA会在K纬空间中选择超平面来划分空间，它也把K维数据投影到了K-1维空间中，因此也具有降维的作用，具体请参考<a href="http://www.dataivy.cn/blog/%E7%BA%BF%E6%80%A7%E5%88%A4%E5%88%AB%E5%88%86%E6%9E%90linear-discriminant-analysis_lda/" target="_blank" rel="noopener">这篇文章</a>。</p>
+</blockquote>
+<hr>
+<h4 id="二次判别分析-「QDA」"><a href="#二次判别分析-「QDA」" class="headerlink" title="二次判别分析 「QDA」"></a><strong>二次判别分析</strong> 「QDA」</h4><p>  二次判别分析「Quadratic Discriminant Analysis」也很简单，它在LDA的基础上抛弃了不同类别的高斯分布具有相同协方差矩阵的假设，也就是<br>  $$<br>  \Sigma_{k} \neq \Sigma_{l} \quad ~ \text{for} ~ ~ k \neq l<br>  $$</p>
+<p>  相应地它在空间内划分出的平面不再是线性。</p>
+  <div align="center"><br>    <img src="http://pappwqm07.bkt.clouddn.com/QDA-boundary" width="300" height="300" alt="QDA" align="center"><br>  </div>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/24/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Eric Chen</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Yancey2126" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:ychen2126@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/yourname" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com/users/7386490/eric-chen" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.instagram.com/erichennnn" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#贝叶斯分类器"><span class="nav-number">1.</span> <span class="nav-text">贝叶斯分类器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线性判别分析-「LDA」"><span class="nav-number">2.</span> <span class="nav-text">线性判别分析 「LDA」</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二次判别分析-「QDA」"><span class="nav-number">3.</span> <span class="nav-text">二次判别分析 「QDA」</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Eric Chen</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
