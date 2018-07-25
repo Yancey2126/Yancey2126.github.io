@@ -424,12 +424,13 @@
         
           
             <h4 id="集成学习"><a href="#集成学习" class="headerlink" title="集成学习"></a>集成学习</h4><p>AdaBoost是Boosting方法的代表，而Boosting又是集成学习「Ensemble Learning」的一种，因此本文首先简略地介绍一下集成学习的思想。</p>
-<p>集成学习最简单的表述就是：将多个学习器（粗略地说即模型）通过特定的方式结合到一起，综合每个学习器得出的结果作出最终判断。集成中每一个单一的模型被称为<strong>个体学习器</strong>「Individual Learner」。根据个体学习器是否全部属于同一类，集成也有同质「homogeneous」和异质「heterogeneous」之分。</p>
-<p>集成学习通过将多个弱学习器「Weak Learner」结合，通常能达到更优越的泛化能力。现行的集成学习方法主要分为两大类：</p>
+<p>集成学习最简单的表述就是：将多个学习器（粗略地说也就是模型）通过特定的方式结合到一起，综合每个学习器得出的结果作出最终判断。集成中每一个单一的模型被称为<strong>个体学习器</strong>「Individual Learner」。</p>
+<p>集成学习通过将多个弱学习器「Weak Learner」结合，通常能达到更优越的泛化能力。现行的集成学习方法主要分为两大范式：</p>
 <ul>
-<li>序列方法：个体学习器之间相互依赖，必须串行生成 —— Boosting</li>
-<li>并行方法：个体学习器间不存在强依赖，可同时生成 —— Bagging/RF</li>
+<li>序列方法：个体学习器之间相互依赖，必须串行生成 —— 如Boosting</li>
+<li>并行方法：个体学习器间不存在强依赖，可同时生成 —— 如Bagging、Random Forest等</li>
 </ul>
+<p>根据个体学习器是否全部属于同一类，集成也有同质「homogeneous」和异质「heterogeneous」之分。</p>
 <h4 id="Boosting"><a href="#Boosting" class="headerlink" title="Boosting"></a>Boosting</h4><p>Boosting算法的原理是首先在初始训练集上训练一个弱学习器 $h_{1}$, 并得到 $h_{1}$ 的误分类的点（假设表示为$E_{1}$)。然后在下一轮训练中，通过手动调整训练集数据的分布，使得这些误分类的点获得更大的权重，从而训练出第二个学习器 $h_{2}$。$h_{2}$ 显而易见会比 $h_{1}$在 $E_{1}$ 的判断上表现得更好。依此往复，直到完成 $T$ 轮为止。此时我们一共训练了 $T$ 个学习器，我们基于所有这些学习器的结果做最终的分类。</p>
 <h4 id="AdaBoost算法"><a href="#AdaBoost算法" class="headerlink" title="AdaBoost算法"></a>AdaBoost算法</h4><p>AdaBoost(Freund &amp; Schapire, 1997)是最著名的Boosting算法。它有多种推导方式，这里我们介绍最经典的加性模型「Additive Model」:</p>
 <p>我们先定义 loss function：AdaBoost使用指数损失函数</p>
