@@ -300,7 +300,10 @@
       
         
           
-            <h4 id="多分类问题"><a href="#多分类问题" class="headerlink" title="多分类问题"></a>多分类问题</h4><h4 id="Sklearn-Source-Code"><a href="#Sklearn-Source-Code" class="headerlink" title="Sklearn Source Code"></a>Sklearn Source Code</h4><p>这里我们给出scikit-learn中AdaBoost Classifier的源码，供有兴趣的读者阅读。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+            <h4 id="多分类问题"><a href="#多分类问题" class="headerlink" title="多分类问题"></a>多分类问题</h4><p>AdaBoost在面对多分类问题时有多种拓展。本文介绍几种著名的算法。</p>
+<h5 id="1-SAMME"><a href="#1-SAMME" class="headerlink" title="1. SAMME"></a>1. SAMME</h5><p>SAMME全称为Stagewise Additive Modeling using a Multi-class Exponential loss function，由[Zhu et al., 2006]提出。SAMME也是scikit-learn AdaBoostClassifier采用的算法之一。<br><img src="http://pappwqm07.bkt.clouddn.com/SAMME" alt="SAMME"></p>
+<p>#####</p>
+<h4 id="Sklearn-Source-Code"><a href="#Sklearn-Source-Code" class="headerlink" title="Sklearn Source Code"></a>Sklearn Source Code</h4><p>这里我们给出scikit-learn中AdaBoost Classifier的源码，供有兴趣的读者阅读。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
 
           
         
@@ -424,8 +427,8 @@
 <p>集成学习最简单的表述就是：将多个学习器（粗略地说即模型）通过特定的方式结合到一起，综合每个学习器得出的结果作出最终判断。集成中每一个单一的模型被称为<strong>个体学习器</strong>「Individual Learner」。根据个体学习器是否全部属于同一类，集成也有同质「homogeneous」和异质「heterogeneous」之分。</p>
 <p>集成学习通过将多个弱学习器「Weak Learner」结合，通常能达到更优越的泛化能力。现行的集成学习方法主要分为两大类：</p>
 <ul>
-<li>序列方法：个体学习器之间相互依赖，必须串行生成 —- Boosting</li>
-<li>并行方法：个体学习器间不存在强依赖，可同时生成 —- Bagging/RF</li>
+<li>序列方法：个体学习器之间相互依赖，必须串行生成 —— Boosting</li>
+<li>并行方法：个体学习器间不存在强依赖，可同时生成 —— Bagging/RF</li>
 </ul>
 <h4 id="Boosting"><a href="#Boosting" class="headerlink" title="Boosting"></a>Boosting</h4><p>Boosting算法的原理是首先在初始训练集上训练一个弱学习器 $h_{1}$, 并得到 $h_{1}$ 的误分类的点（假设表示为$E_{1}$)。然后在下一轮训练中，通过手动调整训练集数据的分布，使得这些误分类的点获得更大的权重，从而训练出第二个学习器 $h_{2}$。$h_{2}$ 显而易见会比 $h_{1}$在 $E_{1}$ 的判断上表现得更好。依此往复，直到完成 $T$ 轮为止。此时我们一共训练了 $T$ 个学习器，我们基于所有这些学习器的结果做最终的分类。</p>
 <h4 id="AdaBoost算法"><a href="#AdaBoost算法" class="headerlink" title="AdaBoost算法"></a>AdaBoost算法</h4><p>AdaBoost(Freund &amp; Schapire, 1997)是最著名的Boosting算法。它有多种推导方式，这里我们介绍最经典的加性模型「Additive Model」:</p>
@@ -466,59 +469,54 @@ $$
 <table>
 <thead>
 <tr>
-<th>Z</th>
-<th style="text-align:right">y</th>
+<th><center>Z</center></th>
+<th style="text-align:right"><center> y</center></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>$z_{1} = (+1, 0)$</td>
-<td style="text-align:right">$y_{1} = +1$</td>
+<td><center>$z_{1} = (+1, 0)$</center></td>
+<td style="text-align:right"><center>$y_{1} = +1$</center></td>
 </tr>
 <tr>
-<td>$z_{2} = (-1, 0)$</td>
-<td style="text-align:right">$y_{2} = +1$</td>
+<td><center>$z_{2} = (-1, 0)$</center></td>
+<td style="text-align:right"><center>$y_{2} = +1$</center></td>
 </tr>
 <tr>
-<td>$z_{3} = (0, +1)$</td>
-<td style="text-align:right">$y_{3} = -1$</td>
+<td><center>$z_{3} = (0, +1)$</center></td>
+<td style="text-align:right"><center>$y_{3} = -1$</center></td>
 </tr>
 <tr>
-<td>$z_{4} = (0, -1)$</td>
-<td style="text-align:right">$y_{4} = -1$</td>
+<td><center>$z_{4} = (0, -1)$</center></td>
+<td style="text-align:right"><center>$y_{4} = -1$</center></td>
 </tr>
 </tbody>
 </table>
-<p>这是一个<a href="https://en.wikipedia.org/wiki/Exclusive_or" target="_blank" rel="noopener">XOR</a>问题，从下图中可以看出样本空间是<strong>线性不可分</strong>的。假设我们的个体学习器遵循如下算法：</p>
-<div align="center"><br>  <img src="http://pappwqm07.bkt.clouddn.com/AdaBoostEx" width="300" height="300" alt="AdaBoost" align="center"><br></div>
-
+<p>这是一个<a href="https://en.wikipedia.org/wiki/Exclusive_or" target="_blank" rel="noopener">XOR</a>问题，从下图(a)中可以看出样本空间是<strong>线性不可分</strong>的。假设我们的个体学习器遵循如下算法：</p>
+<p>选取表中的八个函数之一作为基分类器，选择error最小的一个(如果出现多个函数同error则随机从中抽取)。<br>    <div align="center"><br>      <img src="http://pappwqm07.bkt.clouddn.com/AdaBoostExfunc" width="500" height="300" alt="AdaBoost" align="center"><br>    </div></p>
+<p><img src="http://pappwqm07.bkt.clouddn.com/AdaBoostExp" alt="exp"></p>
+<ol>
+<li>在图(a)中大致分割一下就能看出，「$h_{2}$ $h_{3}$ $h_{5}$ $h_{8}$」都是误差「error」最低的（误判一个）。我们随机选取 $h_{2}$ 作为第一个学习器，则误判点为 $z_{1} = (+1, 0)$, $h_{2}$ 的 $\epsilon = 0.25$。接下来更新 $h_{2}$的权重 $\alpha = 0.5\ln3 \approx 0.55$（算法第6步），同时更新样本分布（算法第7步），如图(b)所示。更新后误分类的点 $Z_{1}$ 将获得更大的权重（$0.433$），其他三点获得较小的权重（$0.144$）</li>
+<li>进入第二轮，现在只有「$h_{3}$ $h_{5}$ $h_{8}$」达到了最低的误差（误判一个且没有误判 $Z_{1}$）。这一次选择 $h_{3}$，更新其权重为$0.81$，如图(c)所示</li>
+<li>进入第三轮，上一轮的误分类点为 $Z_{2}$，因此在「$h_{5}$ $h_{8}$」中选择。最终图(d)为选择 $h_{5}$得到的结果。</li>
+<li>经过三轮的boosting，最终我们通过组合不同的线性分类器，得到了一个可以在训练集上达到零误差的非线性分类器。</li>
+</ol>
+<h4 id="理论分析-amp-拓展"><a href="#理论分析-amp-拓展" class="headerlink" title="理论分析 &amp; 拓展"></a>理论分析 &amp; 拓展</h4><p>本节简略介绍一些关于AdaBoost的理论分析和问题，为可能的拓展作铺垫。</p>
+<ol>
+<li>[Freund and Schapire, 1997] 证明了AdaBoost的训练误差与泛化误差都存在上界「Upper Bound」。特别是泛化误差，至少有 $1-\delta$ 的概率有如下上界：<br>$$<br> \epsilon_{\mathcal{D}} \leq \epsilon_{D} + \tilde{O}\left(\sqrt{\frac{dT}{m} }\right)<br>$$<br>$m$为训练集大小，$T$为Boosting的轮数，$d$可以理解为个体学习器/基学习器的复杂度。</li>
+<li><p>为何不Overfit？ —— 上述分析表明AdaBoost的个体学习器的复杂度以及Boosting的轮数都有可能造成过拟合，但实际应用中AdaBoost却极少出现这种情况。[Schapire et al. 1998]提出了<strong>margin-based</strong>的解释。<br>简单来说，一个样本点的<strong>margin</strong>就是该点到决策边界「Decision Boundary」的距离。这个概念对集成学习得到的边界同样适用。Schapire et al. 证明出：</p>
 <blockquote>
-<p>用表中的八个函数作为分类器，选择error最小的一个。（如果出现多个函数同error则随机从中抽取）</p>
+<p>在其他变量不变的情况下，整个训练集的margin越大，泛化误差越小</p>
 </blockquote>
-<blockquote>
-<table>
-<thead>
-<tr>
-<th>$$ h_{1}(x) = \begin{cases} +1,  &amp; \text{if $x_{1} &gt; -0.5$;} \ -1, &amp; \text{otherwise} \end{cases} $$</th>
-<th style="text-align:right">$$ h_{2}(x) = \begin{cases} -1,  &amp; \text{if $x_{1} &gt; -0.5$;} \ +1, &amp; \text{otherwise} \end{cases} $$</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>$$ h_{3}(x) = \begin{cases} +1,  &amp; \text{if $x_{1} &gt; +0.5$;} \ -1, &amp; \text{otherwise} \end{cases} $$</td>
-<td style="text-align:right">$$ h_{4}(x) = \begin{cases} -1,  &amp; \text{if $x_{1} &gt; +0.5$;} \ +1, &amp; \text{otherwise} \end{cases} $$</td>
-</tr>
-<tr>
-<td>$$ h_{5}(x) = \begin{cases} +1,  &amp; \text{if $x_{2} &gt; -0.5$;} \ -1, &amp; \text{otherwise} \end{cases} $$</td>
-<td style="text-align:right">$$ h_{6}(x) = \begin{cases} -1,  &amp; \text{if $x_{2} &gt; -0.5$;} \ +1, &amp; \text{otherwise} \end{cases} $$</td>
-</tr>
-<tr>
-<td>$$ h_{7}(x) = \begin{cases} +1,  &amp; \text{if $x_{2} &gt; +0.5$;} \ -1, &amp; \text{otherwise} \end{cases} $$</td>
-<td style="text-align:right">$$ h_{8}(x) = \begin{cases} -1,  &amp; \text{if $x_{2} &gt; +0.5$;} \ +1, &amp; \text{otherwise} \end{cases} $$</td>
-</tr>
-</tbody>
-</table>
-</blockquote>
+<p>所以Schapire等人认为AdaBoost不会过拟合的原因可能是它在训练集误差降至零后依然能增加margin。之后[Reyzin and Schapire, 2006]的研究又表明margin的分布对泛化误差有显著的影响。</p>
+</li>
+<li>一个统计学视角：加性模型 —— [Friedman et al. 2000]认为AdaBoost是基于一个特定的<strong>代理损失函数</strong>「surrogate loss」对<strong>加性模型</strong>「Additive Model」进行最优化的过程。<ul>
+<li>代理损失函数指的是这样一族函数，它们与真实的损失函数是<strong>一致</strong>「consistent」的，具体表现在对代理损失函数的最优化能达到贝叶斯最优误差。另一方面代理损失函数通常有更好的数学性质，表现在连续可微等。基于不同的代理损失函数，AdaBoost衍生出了许多变体，如LogitBoost/L2Boost等</li>
+<li>加性模型则比较好理解，AdaBoost的最终模型是多个个体学习器的线性加总：$H(x) = \sum_{t=1}^T\alpha_{t}h_{t}(x)$</li>
+<li>加性模型理论并不能很好的解释AdaBoost不容易过拟合的特质<br></li>
+</ul>
+</li>
+</ol>
 
           
         

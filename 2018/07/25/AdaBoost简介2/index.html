@@ -79,17 +79,19 @@
 
 
 
-<meta name="description" content="多分类问题Sklearn Source Code这里我们给出scikit-learn中AdaBoost Classifier的源码，供有兴趣的读者阅读。12">
+<meta name="description" content="多分类问题AdaBoost在面对多分类问题时有多种拓展。本文介绍几种著名的算法。 1. SAMMESAMME全称为Stagewise Additive Modeling using a Multi-class Exponential loss function，由[Zhu et al., 2006]提出。SAMME也是scikit-learn AdaBoostClassifier采用的算法之">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AdaBoost简介(二)">
 <meta property="og:url" content="http://www.ghostinthehoop.com/2018/07/25/AdaBoost简介2/index.html">
 <meta property="og:site_name" content="Ghost in the Hoop">
-<meta property="og:description" content="多分类问题Sklearn Source Code这里我们给出scikit-learn中AdaBoost Classifier的源码，供有兴趣的读者阅读。12">
+<meta property="og:description" content="多分类问题AdaBoost在面对多分类问题时有多种拓展。本文介绍几种著名的算法。 1. SAMMESAMME全称为Stagewise Additive Modeling using a Multi-class Exponential loss function，由[Zhu et al., 2006]提出。SAMME也是scikit-learn AdaBoostClassifier采用的算法之">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-25T03:46:07.901Z">
+<meta property="og:image" content="http://pappwqm07.bkt.clouddn.com/SAMME">
+<meta property="og:updated_time" content="2018-07-25T07:58:11.617Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AdaBoost简介(二)">
-<meta name="twitter:description" content="多分类问题Sklearn Source Code这里我们给出scikit-learn中AdaBoost Classifier的源码，供有兴趣的读者阅读。12">
+<meta name="twitter:description" content="多分类问题AdaBoost在面对多分类问题时有多种拓展。本文介绍几种著名的算法。 1. SAMMESAMME全称为Stagewise Additive Modeling using a Multi-class Exponential loss function，由[Zhu et al., 2006]提出。SAMME也是scikit-learn AdaBoostClassifier采用的算法之">
+<meta name="twitter:image" content="http://pappwqm07.bkt.clouddn.com/SAMME">
 
 
 
@@ -299,7 +301,10 @@
       
 
       
-        <h4 id="多分类问题"><a href="#多分类问题" class="headerlink" title="多分类问题"></a>多分类问题</h4><h4 id="Sklearn-Source-Code"><a href="#Sklearn-Source-Code" class="headerlink" title="Sklearn Source Code"></a>Sklearn Source Code</h4><p>这里我们给出scikit-learn中AdaBoost Classifier的源码，供有兴趣的读者阅读。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+        <h4 id="多分类问题"><a href="#多分类问题" class="headerlink" title="多分类问题"></a>多分类问题</h4><p>AdaBoost在面对多分类问题时有多种拓展。本文介绍几种著名的算法。</p>
+<h5 id="1-SAMME"><a href="#1-SAMME" class="headerlink" title="1. SAMME"></a>1. SAMME</h5><p>SAMME全称为Stagewise Additive Modeling using a Multi-class Exponential loss function，由[Zhu et al., 2006]提出。SAMME也是scikit-learn AdaBoostClassifier采用的算法之一。<br><img src="http://pappwqm07.bkt.clouddn.com/SAMME" alt="SAMME"></p>
+<p>#####</p>
+<h4 id="Sklearn-Source-Code"><a href="#Sklearn-Source-Code" class="headerlink" title="Sklearn Source Code"></a>Sklearn Source Code</h4><p>这里我们给出scikit-learn中AdaBoost Classifier的源码，供有兴趣的读者阅读。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -480,7 +485,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#多分类问题"><span class="nav-number">1.</span> <span class="nav-text">多分类问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sklearn-Source-Code"><span class="nav-number">2.</span> <span class="nav-text">Sklearn Source Code</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#多分类问题"><span class="nav-number">1.</span> <span class="nav-text">多分类问题</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-SAMME"><span class="nav-number">1.1.</span> <span class="nav-text">1. SAMME</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sklearn-Source-Code"><span class="nav-number">2.</span> <span class="nav-text">Sklearn Source Code</span></a></li></ol></div>
             
 
           </div>
