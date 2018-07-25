@@ -89,7 +89,7 @@
 <meta property="og:image" content="http://pappwqm07.bkt.clouddn.com/Bayes_decision_boundary">
 <meta property="og:image" content="http://pappwqm07.bkt.clouddn.com/LDA_boundary">
 <meta property="og:image" content="http://pappwqm07.bkt.clouddn.com/QDA-boundary">
-<meta property="og:updated_time" content="2018-07-24T06:56:29.102Z">
+<meta property="og:updated_time" content="2018-07-24T07:56:14.416Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linear Discriminant Analysis(LDA)简介">
 <meta name="twitter:description" content="贝叶斯分类器  引入「LDA」之前，我们先介绍贝叶斯分类器「Bayes Classifier」。它是一个重要的基准，因为在所有分类器中它的测试集误差率「Test Error Rate」是最低的。任何其他分类器都可以通过与贝叶斯分类器对比误差率从而评价其理想程度。  贝叶斯分类器形式如下：  $$  C^{Bayes}(x) = \mathop{\arg\max}_{r \in {1, 2, \">
@@ -316,7 +316,14 @@
 </ul>
 <hr>
 <h4 id="线性判别分析-「LDA」"><a href="#线性判别分析-「LDA」" class="headerlink" title="线性判别分析 「LDA」"></a><strong>线性判别分析</strong> 「LDA」</h4><ul>
-<li>先回忆一下逻辑回归「Logistic Regression」的形式<br>$$<br>P(Y = 1 | x;\theta) = h_{\theta}(x) = \frac{e^{\theta^{T}x}}{1 + e^{\theta^{T}x}}<br>$$<br>它估计的是给定输入 $X$ 的情况下，$Y$ 的<strong>条件分布</strong> 「conditional distribution」（本质上是$Y$的后验分布）。方法是通过Sigmoid函数转换线性函数，使其满足概率的基本特征。</li>
+<li><p>线性判别分析最早由「Fisher, 1936」提出，用于二分类问题。其思想非常直观：</p>
+<blockquote>
+<p>给定训练集，设法把样本点设法投影到一个更低维的空间，使得该空间内同类别的样本点尽可能靠近，同时不同类别的样本点尽可能远离。其实就是使每一类的样本中心尽可能得远，并且每一类内的方差尽可能得小。</p>
+</blockquote>
+<p>给定一个只有两类标签的训练集 $D = {(x_{i}, y_{i})<em>{i=1}^m, y</em>{i} \in {0, 1}}$ , 令 $\mu_{0}$ , $\Sigma_{0}$ , $\mu_{1}$ , $\Sigma_{1}$ 分别表示反类/正类的均值向量和协方差矩阵。</p>
+</li>
+<li><p>先回忆一下逻辑回归「Logistic Regression」的形式<br>$$<br>P(Y = 1 | x;\theta) = h_{\theta}(x) = \frac{e^{\theta^{T}x}}{1 + e^{\theta^{T}x}}<br>$$<br>它估计的是给定输入 $X$ 的情况下，$Y$ 的<strong>条件分布</strong> 「conditional distribution」（本质上是$Y$的后验分布）。方法是通过Sigmoid函数转换线性函数，使其满足概率的基本特征。</p>
+</li>
 <li><p>现在我们尝试用另一个思路去给这个条件分布建模，即通过<strong>贝叶斯理论</strong>来估计它。</p>
 <ol>
 <li>首先假设我们知道 $Y$ 的先验分布「prior」<br>$$<br>\pi_{k} = P(Y = k)<br>$$<br>也就是任意一个样本属于第 $k$ 类的概率。</li>
@@ -401,6 +408,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2018/07/24/AdaBoost简介/" rel="prev" title="AdaBoost简介(一)">
+                AdaBoost简介(一) <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -476,7 +487,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
