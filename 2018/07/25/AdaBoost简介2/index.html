@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Machine Learning," />
 
 
 
@@ -79,18 +79,20 @@
 
 
 
-<meta name="description" content="多分类问题AdaBoost在面对多分类问题时有多种拓展。本文介绍几种著名的算法。 1. SAMMESAMME全称为Stagewise Additive Modeling using a Multi-class Exponential loss function，由[Zhu et al., 2006]提出。SAMME也是scikit-learn AdaBoostClassifier采用的算法之">
+<meta name="description" content="多分类问题的拓展在AdaBoost简介(一)中我们介绍了AdaBoost算法的基本思想以及在二分类问题上的应用。AdaBoost在面对多分类问题时也有多种拓展。本文介绍几种流行的算法。 AdaBoost.MH/AdaBoost.M2在把AdaBoost拓展到多分类问题时，一个十分自然的想法就是将多分类问题分解成多个二分类的子问题。这样的分解有两种方式：一对多「one-vesus-re">
+<meta name="keywords" content="Machine Learning">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AdaBoost简介(二)">
 <meta property="og:url" content="http://www.ghostinthehoop.com/2018/07/25/AdaBoost简介2/index.html">
 <meta property="og:site_name" content="Ghost in the Hoop">
-<meta property="og:description" content="多分类问题AdaBoost在面对多分类问题时有多种拓展。本文介绍几种著名的算法。 1. SAMMESAMME全称为Stagewise Additive Modeling using a Multi-class Exponential loss function，由[Zhu et al., 2006]提出。SAMME也是scikit-learn AdaBoostClassifier采用的算法之">
+<meta property="og:description" content="多分类问题的拓展在AdaBoost简介(一)中我们介绍了AdaBoost算法的基本思想以及在二分类问题上的应用。AdaBoost在面对多分类问题时也有多种拓展。本文介绍几种流行的算法。 AdaBoost.MH/AdaBoost.M2在把AdaBoost拓展到多分类问题时，一个十分自然的想法就是将多分类问题分解成多个二分类的子问题。这样的分解有两种方式：一对多「one-vesus-re">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://pappwqm07.bkt.clouddn.com/SAMME">
-<meta property="og:updated_time" content="2018-07-25T08:03:25.618Z">
+<meta property="og:image" content="http://pappwqm07.bkt.clouddn.com/sklearn">
+<meta property="og:updated_time" content="2018-07-26T09:14:44.116Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AdaBoost简介(二)">
-<meta name="twitter:description" content="多分类问题AdaBoost在面对多分类问题时有多种拓展。本文介绍几种著名的算法。 1. SAMMESAMME全称为Stagewise Additive Modeling using a Multi-class Exponential loss function，由[Zhu et al., 2006]提出。SAMME也是scikit-learn AdaBoostClassifier采用的算法之">
+<meta name="twitter:description" content="多分类问题的拓展在AdaBoost简介(一)中我们介绍了AdaBoost算法的基本思想以及在二分类问题上的应用。AdaBoost在面对多分类问题时也有多种拓展。本文介绍几种流行的算法。 AdaBoost.MH/AdaBoost.M2在把AdaBoost拓展到多分类问题时，一个十分自然的想法就是将多分类问题分解成多个二分类的子问题。这样的分解有两种方式：一对多「one-vesus-re">
 <meta name="twitter:image" content="http://pappwqm07.bkt.clouddn.com/SAMME">
 
 
@@ -301,10 +303,22 @@
       
 
       
-        <h4 id="多分类问题"><a href="#多分类问题" class="headerlink" title="多分类问题"></a>多分类问题</h4><p>AdaBoost在面对多分类问题时有多种拓展。本文介绍几种著名的算法。</p>
-<h5 id="1-SAMME"><a href="#1-SAMME" class="headerlink" title="1. SAMME"></a>1. SAMME</h5><p>SAMME全称为Stagewise Additive Modeling using a Multi-class Exponential loss function，由[Zhu et al., 2006]提出。SAMME也是scikit-learn AdaBoostClassifier采用的算法之一。<br><img src="http://pappwqm07.bkt.clouddn.com/SAMME" alt="SAMME"></p>
-<p>#####</p>
-<h4 id="Sklearn-Source-Code"><a href="#Sklearn-Source-Code" class="headerlink" title="Sklearn Source Code"></a>Sklearn Source Code</h4><p>这里我们给出scikit-learn中AdaBoost Classifier的源码，供有兴趣的读者阅读。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+        <h4 id="多分类问题的拓展"><a href="#多分类问题的拓展" class="headerlink" title="多分类问题的拓展"></a>多分类问题的拓展</h4><p>在<a href="http://localhost:4000/2018/07/24/AdaBoost%E7%AE%80%E4%BB%8B/" target="_blank" rel="noopener">AdaBoost简介(一)</a>中我们介绍了AdaBoost算法的基本思想以及在二分类问题上的应用。AdaBoost在面对多分类问题时也有多种拓展。本文介绍几种流行的算法。</p>
+<h5 id="AdaBoost-MH-AdaBoost-M2"><a href="#AdaBoost-MH-AdaBoost-M2" class="headerlink" title="AdaBoost.MH/AdaBoost.M2"></a>AdaBoost.MH/AdaBoost.M2</h5><p>在把AdaBoost拓展到多分类问题时，一个十分自然的想法就是将多分类问题<strong>分解</strong>成多个二分类的子问题。这样的分解有两种方式：<br><strong>一对多</strong>「one-vesus-rest」和<strong>一对一</strong>「one-vesus-one」。</p>
+<ul>
+<li>假设我们的目标变量的标签的空间「output space」为 $\mathcal{Y}$，所以一共有$|\mathcal{Y}|$个类。</li>
+<li>one-vesus-rest 把一个多分类分解成$|\mathcal{Y}|$个二分类问题 —— 在第$i$个二分类中，如果当前样本的标签是第$i$类就标记为 $1$，否则为 $0$。[Schapire and Singer, 1999]据此提出了<strong>AdaBoost.MH</strong>算法：<br>该算法一共会训练$|\mathcal{Y}|$个二分类的AdaBoost classifier。其中第$i$类对应的output是<br>$$H_{i}(x) = \sum_{t=1}^T \alpha_{t}h_{t}(x)$$<br>最终从$|\mathcal{Y}|$个结果中选择output最大的一类：$$H(x) = \arg\max_{i \in |\mathcal{Y}|}H_{i}(x) $$</li>
+<li>one-vesus-one 则分解出$\frac{|\mathcal{Y}|(|\mathcal{Y}|-1)} 2$ 个 —— 把所有类别两两组合。[Freund and Schapire, 1997]相应地设计了<strong>AdaBoost.M2</strong>算法，后期又出现了[Schapire and Singer, 1999]的<strong>AdaBoost.MR</strong>算法等。其细节我们不在此详述。</li>
+</ul>
+<h5 id="SAMME"><a href="#SAMME" class="headerlink" title="SAMME"></a>SAMME</h5><p>SAMME全称为Stagewise Additive Modeling using a Multi-class Exponential loss function，由[Zhu et al., 2006]提出。SAMME也是<code>scikit-learn</code> <code>AdaBoostClassifier</code>采用的算法之一， 它在权重的更新迭代上作了修改，使其能够最小化多分类情况下的指数损失函数。<br>$$\alpha_{t} = \frac 12 \ln(\frac{1-\epsilon_{t}}{\epsilon_{t}}) + \ln(|\mathcal{Y}| - 1)$$<br>SAMME的算法流程如下：<br><img src="http://pappwqm07.bkt.clouddn.com/SAMME" alt="SAMME"></p>
+<h5 id="SAMME-R"><a href="#SAMME-R" class="headerlink" title="SAMME.R"></a>SAMME.R</h5><p>可以看出SAMME算法的迭代和最终结果都是依赖于每一轮boosting给出的弱分类器的分类结果。每个个体分类器给出的结果都是一个固定的类，比如「狗、猫、兔」。然后统计误分类点并计算误差，更新权重和分布，进入下一轮。<br>SAMME.R是SAMME的一种变体，它使用的个体分类器不再直接判断分类的标签，而是给出每一类对应的概率估计：$$P(c = k|x), ~ k = 1,\dots. K$$<br>用于反映分类器对每一类的置信程度。现在学习器给出的结果是连续而不是离散的了，相应的更新规则也随之改变了。<br>SAMME.R的算法如下：</p>
+<h4 id="Sklearn-Source-Code"><a href="#Sklearn-Source-Code" class="headerlink" title="Sklearn Source Code"></a>Sklearn Source Code</h4><p>这里我们给出<code>scikit-learn</code>中<code>AdaBoost Classifier</code>的<a href="https://github.com/scikit-learn/scikit-learn/blob/ed5e127b2460b94dbf3398d97990cb54f188d360/sklearn/ensemble/weight_boosting.py" target="_blank" rel="noopener">源码</a>，供有兴趣的读者阅读。<br>由于<code>scikit-learn</code>本身有很多层模块，每一部分也都封装得比较细，读起来会比较抽象。本文仅根据作者读代码的经历总结出一个大概的框架。<br><img src="http://pappwqm07.bkt.clouddn.com/sklearn" alt="graph"></p>
+<p><code>sklearn</code>中的<code>AdaBoostClassifier</code>和<code>AdaBoostRegressor</code>都是从BaseEstimator类下一层层继承下来的。</p>
+<ul>
+<li>首先在<code>ensemble</code>模块中，<code>BaseEnsemble</code>由<code>base.BaseEstimator</code>继承而来，作为所有<code>Ensemble</code>模型的基类，它建立了集成学习的大框架。Attributes包括<code>base_estimator</code>（基学习器）、<code>n_estimators</code>（学习器的数量/也就是boosting的轮数）</li>
+<li><code>BaseWeightBoosting</code>继承了<code>BaseEnsemble</code>的方法和属性，同时增加了属性<code>random_state</code>和<code>learning_rate</code>。它还首次定义了训练模型的方法<code>fit</code>。<code>fit</code>主要通过for loop进行每一轮的boosting，调用了<code>_boost</code>方法。然后把每一轮boosting的误差和权重以字典的形式储存。但我们知道不同的算法采用的是不同的boosting的更新方式，所以<code>_boost</code>被子类<code>AdaBoostClassifier</code>重写</li>
+<li>最后，<code>AdaBoostClassifier</code>继承<code>BaseWeightBoosting</code>类，并增加<code>algorithm</code>属性，用于选择不同的AdaBoost实现算法「SAMME、SAMME.R」。<code>_boost</code>方法最底层的实现也是在这一类中完成的。</li>
+</ul>
 
       
     </div>
@@ -319,6 +333,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+          
+        </div>
       
 
       
@@ -423,6 +443,15 @@
             
 
             
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
 
           </nav>
 
@@ -485,7 +514,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#多分类问题"><span class="nav-number">1.</span> <span class="nav-text">多分类问题</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-SAMME"><span class="nav-number">1.1.</span> <span class="nav-text">1. SAMME</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sklearn-Source-Code"><span class="nav-number">2.</span> <span class="nav-text">Sklearn Source Code</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#多分类问题的拓展"><span class="nav-number">1.</span> <span class="nav-text">多分类问题的拓展</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#AdaBoost-MH-AdaBoost-M2"><span class="nav-number">1.1.</span> <span class="nav-text">AdaBoost.MH/AdaBoost.M2</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#SAMME"><span class="nav-number">1.2.</span> <span class="nav-text">SAMME</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#SAMME-R"><span class="nav-number">1.3.</span> <span class="nav-text">SAMME.R</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sklearn-Source-Code"><span class="nav-number">2.</span> <span class="nav-text">Sklearn Source Code</span></a></li></ol></div>
             
 
           </div>

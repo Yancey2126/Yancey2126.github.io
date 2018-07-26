@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Machine Learning," />
 
 
 
@@ -80,6 +80,7 @@
 
 
 <meta name="description" content="集成学习AdaBoost是Boosting方法的代表，而Boosting又是集成学习「Ensemble Learning」的一种，因此本文首先简略地介绍一下集成学习的思想。 集成学习最简单的表述就是：将多个学习器（粗略地说也就是模型）通过特定的方式结合到一起，综合每个学习器得出的结果作出最终判断。集成中每一个单一的模型被称为个体学习器「Individual Learner」。 集成学习通过将多">
+<meta name="keywords" content="Machine Learning">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AdaBoost简介(一)">
 <meta property="og:url" content="http://www.ghostinthehoop.com/2018/07/24/AdaBoost简介/index.html">
@@ -89,7 +90,7 @@
 <meta property="og:image" content="http://pappwqm07.bkt.clouddn.com/AdaBoost">
 <meta property="og:image" content="http://pappwqm07.bkt.clouddn.com/AdaBoostExfunc">
 <meta property="og:image" content="http://pappwqm07.bkt.clouddn.com/AdaBoostExp">
-<meta property="og:updated_time" content="2018-07-25T10:05:15.467Z">
+<meta property="og:updated_time" content="2018-07-26T09:00:31.656Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AdaBoost简介(一)">
 <meta name="twitter:description" content="集成学习AdaBoost是Boosting方法的代表，而Boosting又是集成学习「Ensemble Learning」的一种，因此本文首先简略地介绍一下集成学习的思想。 集成学习最简单的表述就是：将多个学习器（粗略地说也就是模型）通过特定的方式结合到一起，综合每个学习器得出的结果作出最终判断。集成中每一个单一的模型被称为个体学习器「Individual Learner」。 集成学习通过将多">
@@ -312,7 +313,7 @@
 </ul>
 <p>根据个体学习器是否全部属于同一类，集成也有同质「homogeneous」和异质「heterogeneous」之分。</p>
 <h4 id="Boosting"><a href="#Boosting" class="headerlink" title="Boosting"></a>Boosting</h4><p>Boosting算法的原理是首先在初始训练集上训练一个弱学习器 $h_{1}$, 并得到 $h_{1}$ 的误分类的点（假设表示为$E_{1}$)。然后在下一轮训练中，通过手动调整训练集数据的分布，使得这些误分类的点获得更大的权重，从而训练出第二个学习器 $h_{2}$。$h_{2}$ 显而易见会比 $h_{1}$在 $E_{1}$ 的判断上表现得更好。依此往复，直到完成 $T$ 轮为止。此时我们一共训练了 $T$ 个学习器，我们基于所有这些学习器的结果做最终的分类。</p>
-<h4 id="AdaBoost算法"><a href="#AdaBoost算法" class="headerlink" title="AdaBoost算法"></a>AdaBoost算法</h4><p>AdaBoost(Freund &amp; Schapire, 1997)是最著名的Boosting算法。它有多种推导方式，这里我们介绍最经典的加性模型「Additive Model」:</p>
+<h4 id="AdaBoost算法"><a href="#AdaBoost算法" class="headerlink" title="AdaBoost算法"></a>AdaBoost算法</h4><p>AdaBoost[Freund &amp; Schapire, 1997]是最著名的Boosting算法。它有多种推导方式，这里我们介绍最经典的加性模型「Additive Model」:</p>
 <p>我们先定义 loss function：AdaBoost使用指数损失函数</p>
 <p>  $$<br>    l_{exp}(H | \mathcal{D}) = \Bbb{E}_{x \sim \mathcal{D}}[e^{-f(x)H(x)}]<br>  $$</p>
 <p>$H(x)$ 是所有学习器 $h_{t}(x)$的线性加权组合；$\mathcal{D}$ 表示当前训练集服从的分布：</p>
@@ -343,10 +344,10 @@ $$
 <li><p>由于指数损失函数<strong>连续可微</strong>， 用它来替代可以带来更好的数学性质。</p>
 </li>
 </ul>
-<p>AdaBoost的具体算法如下：</p>
+<h5 id="算法介绍"><a href="#算法介绍" class="headerlink" title="算法介绍"></a>算法介绍</h5><p>AdaBoost的具体算法如下：</p>
   <div align="center"><br>    <img src="http://pappwqm07.bkt.clouddn.com/AdaBoost" width="600" height="500" alt="AdaBoost" align="center"><br>  </div>
 
-<h4 id="一个简单的例子"><a href="#一个简单的例子" class="headerlink" title="一个简单的例子"></a>一个简单的例子</h4><p>本例出自<a href="http://item.jd.com/1192351022.html" target="_blank" rel="noopener">[Zhou，2012]</a>。<br>假定我们目前有一个只有四个样本的二维数据：</p>
+<h5 id="一个简单的例子"><a href="#一个简单的例子" class="headerlink" title="一个简单的例子"></a>一个简单的例子</h5><p>本例出自<a href="http://item.jd.com/1192351022.html" target="_blank" rel="noopener">[Zhou，2012]</a>。<br>假定我们目前有一个只有四个样本的二维数据：</p>
 <table>
 <thead>
 <tr>
@@ -382,7 +383,7 @@ $$
 <li>进入第三轮，上一轮的误分类点为 $Z_{2}$，因此在「$h_{5}$ $h_{8}$」中选择。最终图(d)为选择 $h_{5}$得到的结果。</li>
 <li>经过三轮的boosting，最终我们通过组合不同的线性分类器，得到了一个可以在训练集上达到零误差的非线性分类器。</li>
 </ol>
-<h4 id="理论分析-amp-拓展"><a href="#理论分析-amp-拓展" class="headerlink" title="理论分析 &amp; 拓展"></a>理论分析 &amp; 拓展</h4><p>本节简略介绍一些关于AdaBoost的理论分析和问题，为可能的拓展作铺垫。</p>
+<h5 id="理论分析-amp-拓展"><a href="#理论分析-amp-拓展" class="headerlink" title="理论分析 &amp; 拓展"></a>理论分析 &amp; 拓展</h5><p>本节简略介绍一些关于AdaBoost的理论分析和问题，为可能的拓展作铺垫。</p>
 <ol>
 <li>[Freund and Schapire, 1997] 证明了AdaBoost的训练误差与泛化误差都存在上界「Upper Bound」。特别是泛化误差，至少有 $1-\delta$ 的概率有如下上界：<br>$$<br> \epsilon_{\mathcal{D}} \leq \epsilon_{D} + \tilde{O}\left(\sqrt{\frac{dT}{m} }\right)<br>$$<br>$m$为训练集大小，$T$为Boosting的轮数，$d$可以理解为个体学习器/基学习器的复杂度。</li>
 <li><p>为何不Overfit？ —— 上述分析表明AdaBoost的个体学习器的复杂度以及Boosting的轮数都有可能造成过拟合，但实际应用中AdaBoost却极少出现这种情况。[Schapire et al. 1998]提出了<strong>margin-based</strong>的解释。<br>简单来说，一个样本点的<strong>margin</strong>就是该点到决策边界「Decision Boundary」的距离。这个概念对集成学习得到的边界同样适用。Schapire et al. 证明出：</p>
@@ -394,11 +395,14 @@ $$
 <li>一个统计学视角：加性模型 —— [Friedman et al. 2000]认为AdaBoost是基于一个特定的<strong>代理损失函数</strong>「surrogate loss」对<strong>加性模型</strong>「Additive Model」进行最优化的过程。<ul>
 <li>代理损失函数指的是这样一族函数，它们与真实的损失函数是<strong>一致</strong>「consistent」的，具体表现在对代理损失函数的最优化能达到贝叶斯最优误差。另一方面代理损失函数通常有更好的数学性质，表现在连续可微等。基于不同的代理损失函数，AdaBoost衍生出了许多变体，如LogitBoost/L2Boost等</li>
 <li>加性模型则比较好理解，AdaBoost的最终模型是多个个体学习器的线性加总：$H(x) = \sum_{t=1}^T\alpha_{t}h_{t}(x)$</li>
-<li>加性模型理论并不能很好的解释AdaBoost不容易过拟合的特质<br></li>
+<li>加性模型理论并不能很好的解释AdaBoost不容易过拟合的特质</li>
 </ul>
 </li>
 </ol>
-
+<h5 id="缺陷"><a href="#缺陷" class="headerlink" title="缺陷"></a>缺陷</h5><p>   实际应用中数据常常会有噪声「noise」。AdaBoost算法一开始就是针对clean dataset设计的，所以它的主要缺点就是对噪声十分敏感。我们其实回顾一下AdaBoost的原理就可以理解：在集成的过程中，每一轮boosting得到的误分类点都会在下一轮中更受重视。如果训练集中有一部分样本的标签被人为地标错了，那这些样本就会在得到更大的权重，实际上是使后续的学习器朝着一个错误的方向靠近了。</p>
+<p>   [Domingo and Watanabe, 2000]为了解决这一问题提出了MadaBoost。MadaBoost对样本权重设置了一个上限，使误分类的样本权重不会无限制地增加，这样就减小了噪声对算法的影响。</p>
+<p>   FilterBoost[Bradleya and Schapire, 2008]采用了另一种方式压缩样本权重：将指数损失函数替换为对数损失。数学上可以证明在对数损失作为loss function时，权重的增加始终会被限制在$1$以内。</p>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4>
       
     </div>
     
@@ -412,6 +416,12 @@ $$
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+          
+        </div>
       
 
       
@@ -520,6 +530,15 @@ $$
             
 
             
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
 
           </nav>
 
@@ -582,7 +601,7 @@ $$
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#集成学习"><span class="nav-number">1.</span> <span class="nav-text">集成学习</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Boosting"><span class="nav-number">2.</span> <span class="nav-text">Boosting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AdaBoost算法"><span class="nav-number">3.</span> <span class="nav-text">AdaBoost算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一个简单的例子"><span class="nav-number">4.</span> <span class="nav-text">一个简单的例子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#理论分析-amp-拓展"><span class="nav-number">5.</span> <span class="nav-text">理论分析 &amp; 拓展</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#集成学习"><span class="nav-number">1.</span> <span class="nav-text">集成学习</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Boosting"><span class="nav-number">2.</span> <span class="nav-text">Boosting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AdaBoost算法"><span class="nav-number">3.</span> <span class="nav-text">AdaBoost算法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#算法介绍"><span class="nav-number">3.1.</span> <span class="nav-text">算法介绍</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一个简单的例子"><span class="nav-number">3.2.</span> <span class="nav-text">一个简单的例子</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#理论分析-amp-拓展"><span class="nav-number">3.3.</span> <span class="nav-text">理论分析 &amp; 拓展</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#缺陷"><span class="nav-number">3.4.</span> <span class="nav-text">缺陷</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
